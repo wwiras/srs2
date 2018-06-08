@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 # from django.utils import timezone
 from .models import Student
-# from .forms import MessageForm, SearchForm, StudentForm
+from .forms import StudentForm
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -13,6 +13,31 @@ from django.db.models import Count, Sum, Q, Case, Value, When, IntegerField
 
 def home(request):
 	return render(request,'base.html')
+
+# Getting student detail
+def student_detail(request,pk):
+    print(Student.objects.all)
+    student = get_object_or_404(Student, pk=pk)
+    print(student)
+    print(student.name)
+    print(student.course)
+    return render(request, 'student/student_detail.html', {'student': student})
+
+def student_new(request):
+
+    if request.method == "POST":
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.createdby = request.user
+            student.save()
+            messages.success(request, "Student record with ID: " + str(student.pk) + " has been created ! ")
+            # return redirect(reverse_lazy('student_detail',kwargs={'pk': student.pk }))
+    else:
+        form = StudentForm()
+    print(request.user)
+    return render(request, 'student/student_new.html', {'form': form})
+
 
 def home_sbadmin(request):
   return render(request,'student/index.html')
