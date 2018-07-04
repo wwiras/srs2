@@ -9,5 +9,7 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', views.student_detail, name='student_detail'),
     url(r'^new/$', views.student_new, name='student_new'),
     url(r'^(?P<pk>\d+)/remove$', views.student_remove, name='student_remove'),
+    url(r'^(?P<pk>\d+)/edit$', views.student_edit, name='student_edit'),
+    
 
 ]

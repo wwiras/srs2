@@ -14,6 +14,24 @@ from django.db.models import Count, Sum, Q, Case, Value, When, IntegerField
 def home(request):
 	return render(request,'base.html')
 
+# Updating student
+def student_edit(request,pk):
+
+    student = get_object_or_404(Student, pk=pk)
+    if request.method == "POST":
+        form = StudentForm(request.POST,instance=student)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.createdby = request.user
+            student.save()
+            # return redirect('post_detail', pk=post.pk)
+            messages.success(request, "Student record with ID: " + str(student.pk) + " has been updated! ")
+            return redirect(reverse_lazy('student_detail',kwargs={'pk': student.pk }))
+    else:
+        form = StudentForm(instance=student)
+    
+    return render(request, 'student/student_edit.html', {'form': form})
+
 # Removing student
 def student_remove(request,pk):
 
