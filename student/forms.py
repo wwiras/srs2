@@ -9,6 +9,11 @@ class StudentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
 
+        #Add class to all fields
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control3'
+
+
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
